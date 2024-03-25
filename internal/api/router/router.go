@@ -5,6 +5,8 @@ import (
 
 	"github.com/Fer9808/yofio-go-test/internal/api/controllers"
 	"github.com/Fer9808/yofio-go-test/internal/api/middlewares"
+	"github.com/Fer9808/yofio-go-test/internal/api/services"
+	"github.com/Fer9808/yofio-go-test/internal/pkg/persistence"
 
 	"io"
 	"os"
@@ -14,6 +16,12 @@ import (
 
 func Setup() *gin.Engine {
 	app := gin.New()
+
+	// Config Dependencies
+	repo := persistence.GetAssignmentsRepository()
+	creditService := services.NewCreditServiceImpl(repo)
+
+	ctrl := controllers.NewController(creditService, repo)
 
 	// Logging to a file.
 	f, _ := os.Create("log/api.log")
@@ -39,8 +47,8 @@ func Setup() *gin.Engine {
 	app.NoRoute(middlewares.NoRouteHandler())
 
 	// Routes
-	app.POST("/api/credit-assignment", controllers.CreateAssignments)
-	app.POST("/api/statistics", controllers.GetStatistics)
+	app.POST("/api/credit-assignment", ctrl.CreateAssignments)
+	app.POST("/api/statistics", ctrl.GetStatistics)
 
 	return app
 }

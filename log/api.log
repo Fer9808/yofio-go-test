@@ -1,1 +1,4 @@
-::1 - - [25/Mar/2024:03:40:45 -0600] "POST /api/statistics HTTP/1.1 200 3.890833ms " " PostmanRuntime/7.35.0" " "
+::1 - - [25/Mar/2024:06:29:07 -0600] "POST /api/credit-assignment HTTP/1.1 400 4.057625ms " " PostmanRuntime/7.35.0" " "
+::1 - - [25/Mar/2024:06:29:09 -0600] "POST /api/statistics HTTP/1.1 200 11.441167ms " " PostmanRuntime/7.35.0" " "
+::1 - - [25/Mar/2024:06:29:16 -0600] "POST /api/credit-assignment HTTP/1.1 200 2.505958ms " " PostmanRuntime/7.35.0" " "
+::1 - - [25/Mar/2024:06:29:17 -0600] "POST /api/statistics HTTP/1.1 200 2.276625ms " " PostmanRuntime/7.35.0" " "

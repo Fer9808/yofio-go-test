@@ -8,14 +8,19 @@ import (
 	"github.com/Fer9808/yofio-go-test/internal/pkg/persistence"
 )
 
-type CreditServiceImpl struct{}
+type CreditAssigner interface {
+	Assign(investment int32) (int32, int32, int32, error)
+}
 
-func NewCreditServiceImpl() *CreditServiceImpl {
-	return &CreditServiceImpl{}
+type CreditServiceImpl struct {
+	repo persistence.AssignmentsRepositorInterface
+}
+
+func NewCreditServiceImpl(repo persistence.AssignmentsRepositorInterface) *CreditServiceImpl {
+	return &CreditServiceImpl{repo: repo}
 }
 
 func (c CreditServiceImpl) Assign(investment int32) (int32, int32, int32, error) {
-	s := persistence.GetAssignmentsRepository()
 	for x := investment / 300; x >= 0; x-- {
 		for y := (investment - 300*x) / 500; y >= 0; y-- {
 			for z := (investment - 300*x - 500*y) / 700; z >= 0; z-- {
@@ -29,7 +34,7 @@ func (c CreditServiceImpl) Assign(investment int32) (int32, int32, int32, error)
 						Success:       true,
 					}
 
-					if err := s.Add(&assignment); err != nil {
+					if err := c.repo.Add(&assignment); err != nil {
 						log.Println(err)
 					}
 
@@ -44,7 +49,7 @@ func (c CreditServiceImpl) Assign(investment int32) (int32, int32, int32, error)
 		Success:    false,
 	}
 
-	if err := s.Add(&assignment); err != nil {
+	if err := c.repo.Add(&assignment); err != nil {
 		log.Println(err)
 	}
 

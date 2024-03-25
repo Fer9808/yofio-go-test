@@ -5,6 +5,11 @@ import (
 	models "github.com/Fer9808/yofio-go-test/internal/pkg/models"
 )
 
+type AssignmentsRepositorInterface interface {
+	Add(assignments *models.Assignments) error
+	All() (StatisticsResponse, error)
+}
+
 type AssignmentsRepository struct{}
 
 var assignmentsRepository *AssignmentsRepository

@@ -7,10 +7,15 @@ import (
 
 	"github.com/Fer9808/yofio-go-test/internal/api/services"
 	"github.com/Fer9808/yofio-go-test/internal/pkg/persistence"
-	"github.com/Fer9808/yofio-go-test/pkg/http-err"
+	http_err "github.com/Fer9808/yofio-go-test/pkg/http-err"
 
 	"github.com/gin-gonic/gin"
 )
+
+type Controller struct {
+	CreditService services.CreditAssigner
+	repo          persistence.AssignmentsRepositorInterface
+}
 
 type InvestmentReq struct {
 	Investment int32 `json:"investment" binding:"required"`
@@ -22,6 +27,13 @@ type InvestmentRep struct {
 	CreditType700 int32 `json:"credit_type_700"`
 }
 
+func NewController(creditService services.CreditAssigner, repo persistence.AssignmentsRepositorInterface) *Controller {
+	return &Controller{
+		CreditService: creditService,
+		repo:          repo,
+	}
+}
+
 // CreateAssignments godoc
 // @Summary Realiza el proceso de asignación de un crédito
 // @Description Create Assigments
@@ -30,12 +42,11 @@ type InvestmentRep struct {
 // @Success 200 {object} InvestmentRep
 // @Failure 400  {object}  httputil.HTTPError
 // @Router /api/credit-assignment [post]
-func CreateAssignments(c *gin.Context) {
+func (ctrl *Controller) CreateAssignments(c *gin.Context) {
 	var investmentReq InvestmentReq
-	creditService := services.NewCreditServiceImpl()
 	_ = c.BindJSON(&investmentReq)
 
-	x, y, z, err := creditService.Assign(investmentReq.Investment)
+	x, y, z, err := ctrl.CreditService.Assign(investmentReq.Investment)
 	if err != nil {
 		http_err.NewError(c, http.StatusBadRequest, err)
 		log.Println(err)
@@ -56,9 +67,8 @@ func CreateAssignments(c *gin.Context) {
 // @Success 200 {object} Statistics
 // @Failure 400  {object}  httputil.HTTPError
 // @Router /api/statistics [post]
-func GetStatistics(c *gin.Context) {
-	s := persistence.GetAssignmentsRepository()
-	if statistics, err := s.All(); err != nil {
+func (ctrl *Controller) GetStatistics(c *gin.Context) {
+	if statistics, err := ctrl.repo.All(); err != nil {
 		http_err.NewError(c, http.StatusNotFound, errors.New("Error al obtener las estadisticas"))
 		log.Println(err)
 	} else {
