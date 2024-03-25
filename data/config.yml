@@ -1,0 +1,11 @@
+database:
+  driver: "sqlite"
+  dbname: "data/database"
+  max_lifetime: 7200
+  max_open_conns: 150
+  max_idle_conns: 50
+
+server:
+  port: "3000"
+  #release | debug
+  mode: "release"
