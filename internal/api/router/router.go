@@ -10,8 +10,6 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func Setup() *gin.Engine {
@@ -39,9 +37,6 @@ func Setup() *gin.Engine {
 	app.Use(gin.Recovery())
 	app.Use(middlewares.CORS())
 	app.NoRoute(middlewares.NoRouteHandler())
-
-	// Docs Routes
-	app.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// Routes
 	app.POST("/api/credit-assignment", controllers.CreateAssignments)
