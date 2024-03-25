@@ -1,7 +1,8 @@
-FROM golang:1.15.3-alpine AS build_base
+FROM golang:alpine3.19 AS build_base
 
 ENV CGO_ENABLED=1
 ENV GO111MODULE=on
+ENV CGO_CFLAGS="-D_LARGEFILE64_SOURCE"
 RUN apk add --no-cache git  git gcc g++
 
 # Set the Current Working Directory inside the container
