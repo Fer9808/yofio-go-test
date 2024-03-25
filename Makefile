@@ -11,4 +11,4 @@ build-docker: build
 	docker build . -t api-rest
 
 run-docker: build-docker
-	docker run -p 3000:3000 api-rest
+	docker run -p 8080:8080 api-rest

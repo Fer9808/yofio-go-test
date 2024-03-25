@@ -6,6 +6,6 @@ database:
   max_idle_conns: 50
 
 server:
-  port: "3000"
+  port: "8080"
   #release | debug
   mode: "release"

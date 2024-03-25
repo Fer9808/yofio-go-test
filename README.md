@@ -14,7 +14,7 @@ docker build . -t api-rest
 2. **Run**
 
 ```shell script
-docker run -p 3000:3000 api-rest
+docker run -p 8080:8080 api-rest
 ```
 
 3. **Test**
