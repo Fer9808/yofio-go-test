@@ -5,7 +5,7 @@ import (
 
 	"github.com/Fer9808/yofio-go-test/internal/api/router"
 	"github.com/Fer9808/yofio-go-test/internal/pkg/config"
-	"github.com/Fer9808/yofio-go-test/pkg/db"
+	"github.com/Fer9808/yofio-go-test/internal/pkg/db"
 	"github.com/gin-gonic/gin"
 )
 
