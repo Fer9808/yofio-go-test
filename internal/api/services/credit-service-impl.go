@@ -21,28 +21,34 @@ func NewCreditServiceImpl(repo persistence.AssignmentsRepositorInterface) *Credi
 }
 
 func (c CreditServiceImpl) Assign(investment int32) (int32, int32, int32, error) {
-	for x := investment / 300; x >= 0; x-- {
-		for y := (investment - 300*x) / 500; y >= 0; y-- {
-			for z := (investment - 300*x - 500*y) / 700; z >= 0; z-- {
-				if 300*x+500*y+700*z == investment {
-					// Registrar asignación exitosa
-					assignment := models.Assignments{
-						Investment:    investment,
-						CreditType300: x,
-						CreditType500: y,
-						CreditType700: z,
-						Success:       true,
-					}
+	// Se realiza la iteración para asignar todos los posibles créditos de $700
+	for z := investment / 700; z >= 0; z-- {
+		remainingAfter700s := investment - z*700
+		// Se realiza la iteración para asignar todos los posibles créditos de $500 con el restante
+		for y := remainingAfter700s / 500; y >= 0; y-- {
+			remainingAfter500s := remainingAfter700s - y*500
+			// Se realiza la iteración para asignar todos los créditos de $300 con el restante
+			if remainingAfter500s%300 == 0 {
+				x := remainingAfter500s / 300
 
-					if err := c.repo.Add(&assignment); err != nil {
-						log.Println(err)
-					}
-
-					return x, y, z, nil
+				// Registrar asignación exitosa
+				assignment := models.Assignments{
+					Investment:    investment,
+					CreditType300: x,
+					CreditType500: y,
+					CreditType700: z,
+					Success:       true,
 				}
+
+				if err := c.repo.Add(&assignment); err != nil {
+					log.Println(err)
+				}
+
+				return x, y, z, nil
 			}
 		}
 	}
+
 	// Registrar intento fallido
 	assignment := models.Assignments{
 		Investment: investment,
